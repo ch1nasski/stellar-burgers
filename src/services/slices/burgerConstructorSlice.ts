@@ -1,6 +1,5 @@
-import { createAsyncThunk, createSlice, nanoid } from '@reduxjs/toolkit';
-
 import { orderBurgerApi } from '@api';
+import { createAsyncThunk, createSlice, nanoid } from '@reduxjs/toolkit';
 
 import type { PayloadAction } from '@reduxjs/toolkit';
 import type { TConstructorIngredient, TConstructorState, TOrder } from '@utils-types';
@@ -21,8 +20,9 @@ const initialState: TBurgerConstructorState = {
 
 export const createOrder = createAsyncThunk(
   'burgerConstructor/createOrder',
-  async (ingredientIds: string[]) => {
+  async (ingredientIds: string[], { dispatch }) => {
     const response = await orderBurgerApi(ingredientIds);
+    dispatch(clearConstructor());
     return response.order;
   }
 );
@@ -79,8 +79,6 @@ const burgerConstructorSlice = createSlice({
         state.orderRequest = false;
         state.orderModalData = action.payload;
         state.orderError = null;
-        state.bun = null;
-        state.ingredients = [];
       })
       .addCase(createOrder.rejected, (state, action) => {
         state.orderRequest = false;
