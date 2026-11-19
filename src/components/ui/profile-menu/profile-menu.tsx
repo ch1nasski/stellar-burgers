@@ -7,6 +7,7 @@ import styles from './profile-menu.module.css';
 export const ProfileMenuUI = ({
   pathname,
   handleLogout,
+  error,
 }: ProfileMenuUIProps): React.JSX.Element => (
   <>
     <NavLink
@@ -31,6 +32,7 @@ export const ProfileMenuUI = ({
       История заказов
     </NavLink>
     <button
+      type="button"
       className={`text text_type_main-medium text_color_inactive pt-4 pb-4 ${styles.button}`}
       onClick={handleLogout}
     >
@@ -41,5 +43,6 @@ export const ProfileMenuUI = ({
         ? 'В этом разделе вы можете изменить свои персональные данные'
         : 'В этом разделе вы можете просмотреть свою историю заказов'}
     </p>
+    {error && <p className="text text_type_main-default">{error}</p>}
   </>
 );

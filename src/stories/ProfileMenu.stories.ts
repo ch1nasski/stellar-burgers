@@ -21,5 +21,6 @@ export const DefaultProfileMenu: Story = {
   args: {
     pathname: '/profile',
     handleLogout: fn(),
+    error: null,
   },
 };
