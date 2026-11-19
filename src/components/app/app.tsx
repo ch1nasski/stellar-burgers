@@ -101,29 +101,13 @@ const App = (): React.JSX.Element => {
             </ProtectedRoute>
           }
         />
-        <Route
-          path="/ingredients/:id"
-          element={
-            <Modal title="Детали ингредиента" onClose={closeModal}>
-              <IngredientDetails />
-            </Modal>
-          }
-        />
-        <Route
-          path="/feed/:number"
-          element={
-            <OrderModal titlePrefix="#" onClose={closeModal}>
-              <OrderInfo />
-            </OrderModal>
-          }
-        />
+        <Route path="/ingredients/:id" element={<IngredientDetails />} />
+        <Route path="/feed/:number" element={<OrderInfo />} />
         <Route
           path="/profile/orders/:number"
           element={
             <ProtectedRoute>
-              <OrderModal titlePrefix="#" onClose={closeModal}>
-                <OrderInfo />
-              </OrderModal>
+              <OrderInfo />
             </ProtectedRoute>
           }
         />
