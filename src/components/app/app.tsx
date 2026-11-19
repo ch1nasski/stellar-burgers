@@ -19,7 +19,7 @@ import {
 import { getUser } from '@slices/authSlice';
 import { getIngredients } from '@slices/ingredientsSlice';
 import { useEffect } from 'react';
-import { Routes, Route, useLocation, useNavigate, useParams } from 'react-router-dom';
+import { Routes, Route, useLocation, useNavigate } from 'react-router-dom';
 
 import { useDispatch } from '../../services/store';
 
@@ -119,7 +119,7 @@ const App = (): React.JSX.Element => {
           <Route
             path="/ingredients/:id"
             element={
-              <Modal title="Детали ингредиента" onClose={closeModal}>
+              <Modal title="" onClose={closeModal}>
                 <IngredientDetails />
               </Modal>
             }
@@ -127,18 +127,18 @@ const App = (): React.JSX.Element => {
           <Route
             path="/feed/:number"
             element={
-              <OrderModal titlePrefix="#" onClose={closeModal}>
+              <Modal title="" onClose={closeModal}>
                 <OrderInfo />
-              </OrderModal>
+              </Modal>
             }
           />
           <Route
             path="/profile/orders/:number"
             element={
               <ProtectedRoute>
-                <OrderModal titlePrefix="#" onClose={closeModal}>
+                <Modal title="" onClose={closeModal}>
                   <OrderInfo />
-                </OrderModal>
+                </Modal>
               </ProtectedRoute>
             }
           />
@@ -149,23 +149,3 @@ const App = (): React.JSX.Element => {
 };
 
 export default App;
-
-type TOrderModalProps = {
-  titlePrefix: string;
-  onClose: () => void;
-  children: React.ReactNode;
-};
-
-const OrderModal = ({
-  titlePrefix,
-  onClose,
-  children,
-}: TOrderModalProps): React.JSX.Element => {
-  const { number } = useParams();
-
-  return (
-    <Modal title={`${titlePrefix}${number}`} onClose={onClose}>
-      {children}
-    </Modal>
-  );
-};
