@@ -1,9 +1,9 @@
+import { getOrderByNumber } from '@slices/orderSlice';
 import { Preloader, OrderInfoUI } from '@ui';
-import { useMemo } from 'react';
-import { useEffect } from 'react';
+import { useMemo, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
+
 import { useDispatch, useSelector } from '@services/store';
-import { getOrderByNumber } from '@slices/ordersSlice';
 
 import type { TIngredient } from '@utils-types';
 
@@ -16,14 +16,18 @@ export const OrderInfo = (): React.JSX.Element => {
       (order) => order.number === Number(number)
     )
   );
-  const { orderData, isLoading, orderError } = useSelector((state) => state.orders);
-  const currentOrder = cachedOrder ?? orderData;
+  const {
+    selectedOrder,
+    isLoading,
+    error: orderError,
+  } = useSelector((state) => state.order);
+  const currentOrder = cachedOrder ?? selectedOrder;
 
   useEffect(() => {
-    if (number && !cachedOrder && orderData?.number !== Number(number)) {
+    if (number && !cachedOrder && selectedOrder?.number !== Number(number)) {
       void dispatch(getOrderByNumber(Number(number)));
     }
-  }, [cachedOrder, dispatch, number, orderData?.number]);
+  }, [cachedOrder, dispatch, number, selectedOrder?.number]);
 
   /* Готовим данные для отображения */
   const orderInfo = useMemo(() => {

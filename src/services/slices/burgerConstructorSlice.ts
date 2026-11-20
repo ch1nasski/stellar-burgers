@@ -1,31 +1,12 @@
-import { orderBurgerApi } from '@api';
-import { createAsyncThunk, createSlice, nanoid } from '@reduxjs/toolkit';
+import { createSlice, nanoid } from '@reduxjs/toolkit';
 
 import type { PayloadAction } from '@reduxjs/toolkit';
-import type { TConstructorIngredient, TConstructorState, TOrder } from '@utils-types';
+import type { TConstructorIngredient, TConstructorState } from '@utils-types';
 
-type TBurgerConstructorState = TConstructorState & {
-  orderRequest: boolean;
-  orderModalData: TOrder | null;
-  orderError: string | null;
-};
-
-const initialState: TBurgerConstructorState = {
+const initialState: TConstructorState = {
   bun: null,
   ingredients: [],
-  orderRequest: false,
-  orderModalData: null,
-  orderError: null,
 };
-
-export const createOrder = createAsyncThunk(
-  'burgerConstructor/createOrder',
-  async (ingredientIds: string[], { dispatch }) => {
-    const response = await orderBurgerApi(ingredientIds);
-    dispatch(clearConstructor());
-    return response.order;
-  }
-);
 
 const burgerConstructorSlice = createSlice({
   name: 'burgerConstructor',
@@ -63,38 +44,11 @@ const burgerConstructorSlice = createSlice({
       state.bun = null;
       state.ingredients = [];
     },
-    clearOrder: (state) => {
-      state.orderModalData = null;
-      state.orderRequest = false;
-    },
-  },
-  extraReducers: (builder) => {
-    builder
-      .addCase(createOrder.pending, (state) => {
-        state.orderRequest = true;
-        state.orderModalData = null;
-        state.orderError = null;
-      })
-      .addCase(createOrder.fulfilled, (state, action) => {
-        state.orderRequest = false;
-        state.orderModalData = action.payload;
-        state.orderError = null;
-      })
-      .addCase(createOrder.rejected, (state, action) => {
-        state.orderRequest = false;
-        state.orderModalData = null;
-        state.orderError = action.error.message ?? 'Не удалось оформить заказ';
-      });
   },
 });
 
-export const {
-  addIngredient,
-  removeIngredient,
-  moveIngredient,
-  clearConstructor,
-  clearOrder,
-} = burgerConstructorSlice.actions;
+export const { addIngredient, removeIngredient, moveIngredient, clearConstructor } =
+  burgerConstructorSlice.actions;
 
 export const createConstructorIngredient = (
   ingredient: TConstructorIngredient

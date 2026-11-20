@@ -17,6 +17,11 @@
   list-style-type: none;
 }
 
+.elementsEmpty {
+  flex: 0 0 auto;
+  min-height: 0;
+}
+
 .total {
   display: flex;
   justify-content: flex-end;
