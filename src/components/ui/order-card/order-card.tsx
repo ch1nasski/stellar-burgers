@@ -20,7 +20,7 @@ export const OrderCardUI = memo(function OrderCardUI({
       to={orderInfo.number.toString()}
       relative="path"
       state={locationState}
-      className={`p-6 mb-4 mr-2 ${styles.order}`}
+      className={`p-6 mb-4 ${styles.order}`}
     >
       <div className={styles.order_info}>
         <span className="text text_type_digits-default">
@@ -40,13 +40,8 @@ export const OrderCardUI = memo(function OrderCardUI({
         <ul className={styles.ingredients}>
           {orderInfo.ingredientsToShow.map((ingredient, index) => {
             const zIndex = maxIngredients - index;
-            const right = 20 * index;
             return (
-              <li
-                className={styles.img_wrap}
-                style={{ zIndex: zIndex, right: right }}
-                key={index}
-              >
+              <li className={styles.img_wrap} style={{ zIndex }} key={index}>
                 <img
                   style={{
                     opacity:

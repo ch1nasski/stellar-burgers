@@ -6,16 +6,17 @@
 
 .column {
   display: inline;
-  min-width: 50%;
+  flex: 1;
+  min-width: 0;
 }
 
 .list {
   display: flex;
-  flex-flow: column wrap;
+  flex-flow: column nowrap;
   max-height: 180px;
   margin: 0;
   padding-left: 0;
-  overflow: hidden;
+  overflow-y: auto;
   list-style: none;
 }
 
@@ -25,7 +26,7 @@
 }
 
 .list_item {
-  min-width: 50%;
+  min-width: 0;
   text-align: left;
 }
 
