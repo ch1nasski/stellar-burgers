@@ -9,17 +9,12 @@
 }
 
 .elements {
-  flex: 1;
+  flex: 0 1 auto;
   min-height: 100px;
   margin: 0;
   padding: 0;
   overflow-y: auto;
   list-style-type: none;
-}
-
-.elementsEmpty {
-  flex: 0 0 auto;
-  min-height: 0;
 }
 
 .total {
