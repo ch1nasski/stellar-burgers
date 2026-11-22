@@ -1,8 +1,9 @@
-import { ForgotPasswordUI } from '@ui-pages';
 import { forgotPassword } from '@slices/authSlice';
-import { useDispatch, useSelector } from '@services/store';
+import { ForgotPasswordUI } from '@ui-pages';
 import { useState, type SyntheticEvent } from 'react';
 import { useNavigate } from 'react-router-dom';
+
+import { useDispatch, useSelector } from '@services/store';
 
 export const ForgotPassword = (): React.JSX.Element => {
   const [email, setEmail] = useState('');
@@ -10,14 +11,23 @@ export const ForgotPassword = (): React.JSX.Element => {
   const error = useSelector((state) => state.auth.error);
   const navigate = useNavigate();
 
-  const handleSubmit = async (e: SyntheticEvent): Promise<void> => {
+  const handleSubmit = (e: SyntheticEvent): void => {
     e.preventDefault();
 
-    const result = await dispatch(forgotPassword(email));
-    if (forgotPassword.fulfilled.match(result)) {
-      localStorage.setItem('resetPassword', 'true');
-      void navigate('/reset-password', { replace: true });
-    }
+    void dispatch(forgotPassword(email))
+      .unwrap()
+      .then(
+        () => {
+          localStorage.setItem('resetPassword', 'true');
+          void navigate('/reset-password', { replace: true });
+        },
+        (error: unknown) => {
+          // Request errors are stored in auth.error and rendered by ForgotPasswordUI.
+          if (typeof error !== 'object' || error === null || !('message' in error)) {
+            console.error('Unexpected password recovery error', error);
+          }
+        }
+      );
   };
 
   return (

@@ -1,7 +1,8 @@
-import { ProfileUI } from '@ui-pages';
 import { updateUser } from '@slices/authSlice';
-import { useDispatch, useSelector } from '@services/store';
+import { ProfileUI } from '@ui-pages';
 import { type SyntheticEvent, useEffect, useState } from 'react';
+
+import { useDispatch, useSelector } from '@services/store';
 
 export const Profile = (): React.JSX.Element => {
   const dispatch = useDispatch();
@@ -28,18 +29,19 @@ export const Profile = (): React.JSX.Element => {
     formValue.email !== profileUser.email ||
     !!formValue.password;
 
-  const handleSubmit = async (e: SyntheticEvent): Promise<void> => {
+  const handleSubmit = (e: SyntheticEvent): void => {
     e.preventDefault();
-    const result = await dispatch(
+    void dispatch(
       updateUser({
         name: formValue.name,
         email: formValue.email,
         ...(formValue.password ? { password: formValue.password } : {}),
       })
-    );
-    if (updateUser.fulfilled.match(result)) {
-      setFormValue((current) => ({ ...current, password: '' }));
-    }
+    ).then((result) => {
+      if (updateUser.fulfilled.match(result)) {
+        setFormValue((current) => ({ ...current, password: '' }));
+      }
+    });
   };
 
   const handleCancel = (e: SyntheticEvent): void => {

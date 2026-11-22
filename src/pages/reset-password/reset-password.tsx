@@ -1,8 +1,9 @@
-import { ResetPasswordUI } from '@ui-pages';
 import { resetPassword } from '@slices/authSlice';
-import { useDispatch, useSelector } from '@services/store';
+import { ResetPasswordUI } from '@ui-pages';
 import { type SyntheticEvent, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+
+import { useDispatch, useSelector } from '@services/store';
 
 export const ResetPassword = (): React.JSX.Element => {
   const navigate = useNavigate();
@@ -11,14 +12,15 @@ export const ResetPassword = (): React.JSX.Element => {
   const dispatch = useDispatch();
   const error = useSelector((state) => state.auth.error);
 
-  const handleSubmit = async (e: SyntheticEvent): Promise<void> => {
+  const handleSubmit = (e: SyntheticEvent): void => {
     e.preventDefault();
 
-    const result = await dispatch(resetPassword({ password, token }));
-    if (resetPassword.fulfilled.match(result)) {
-      localStorage.removeItem('resetPassword');
-      void navigate('/login');
-    }
+    void dispatch(resetPassword({ password, token })).then((result) => {
+      if (resetPassword.fulfilled.match(result)) {
+        localStorage.removeItem('resetPassword');
+        void navigate('/login');
+      }
+    });
   };
 
   useEffect(() => {

@@ -1,5 +1,5 @@
 export type ProfileMenuUIProps = {
   pathname: string;
-  handleLogout: () => void | Promise<void>;
+  handleLogout: () => void;
   error: string | null;
 };

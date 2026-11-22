@@ -1,29 +1,19 @@
-import { RegisterUI } from '@ui-pages';
 import { register } from '@slices/authSlice';
-import { useDispatch, useSelector } from '@services/store';
+import { RegisterUI } from '@ui-pages';
 import { type SyntheticEvent, useState } from 'react';
-import { useLocation, useNavigate } from 'react-router-dom';
+
+import { useDispatch, useSelector } from '@services/store';
 
 export const Register = (): React.JSX.Element => {
   const [userName, setUserName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const dispatch = useDispatch();
-  const navigate = useNavigate();
-  const location = useLocation();
   const error = useSelector((state) => state.auth.error);
 
-  const handleSubmit = async (e: SyntheticEvent): Promise<void> => {
+  const handleSubmit = (e: SyntheticEvent): void => {
     e.preventDefault();
-    const result = await dispatch(
-      register({ name: userName, email, password })
-    );
-    if (register.fulfilled.match(result)) {
-      const from =
-        (location.state as { from?: { pathname?: string } } | null)?.from
-          ?.pathname ?? '/';
-      void navigate(from, { replace: true });
-    }
+    void dispatch(register({ name: userName, email, password }));
   };
 
   return (

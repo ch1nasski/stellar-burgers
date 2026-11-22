@@ -1,19 +1,16 @@
-import { ProfileMenuUI } from '@ui';
 import { logout } from '@slices/authSlice';
+import { ProfileMenuUI } from '@ui';
+import { useLocation } from 'react-router-dom';
+
 import { useDispatch, useSelector } from '@services/store';
-import { useLocation, useNavigate } from 'react-router-dom';
 
 export const ProfileMenu = (): React.JSX.Element => {
   const { pathname } = useLocation();
   const dispatch = useDispatch();
-  const navigate = useNavigate();
   const error = useSelector((state) => state.auth.error);
 
-  const handleLogout = async (): Promise<void> => {
-    const result = await dispatch(logout());
-    if (logout.fulfilled.match(result)) {
-      void navigate('/login', { replace: true });
-    }
+  const handleLogout = (): void => {
+    void dispatch(logout());
   };
 
   return <ProfileMenuUI handleLogout={handleLogout} pathname={pathname} error={error} />;
