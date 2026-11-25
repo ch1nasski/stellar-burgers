@@ -33,43 +33,40 @@ test.describe('Burger constructor', () => {
   }) => {
     await page.getByRole('link', { name: new RegExp(bunName) }).click();
 
+    const modal = page.locator('#modals > div').filter({
+      has: page.getByRole('heading', { name: 'Детали ингредиента' }),
+    });
+    await expect(modal).toBeVisible();
     await expect(
-      page.getByRole('heading', { name: 'Детали ингредиента' })
+      modal.getByRole('heading', { name: 'Детали ингредиента' })
     ).toBeVisible();
-    await expect(page.getByRole('heading', { name: bunName })).toBeVisible();
-    const ingredientDetails = page
-      .getByRole('heading', { name: 'Детали ингредиента' })
-      .locator('..');
-    await expect(ingredientDetails.getByRole('img')).toHaveAttribute(
-      'src',
-      'https://example.test/bun-large.png'
-    );
-    await expect(ingredientDetails.getByText('420', { exact: true })).toBeVisible();
-    await expect(ingredientDetails.getByText('80', { exact: true })).toBeVisible();
-    await expect(ingredientDetails.getByText('24', { exact: true })).toBeVisible();
-    await expect(ingredientDetails.getByText('53', { exact: true })).toBeVisible();
+    await expect(modal.getByRole('heading', { name: bunName })).toBeVisible();
+    await expect(
+      modal.getByRole('img', { name: 'изображение ингредиента.' })
+    ).toHaveAttribute('src', 'https://example.test/bun-large.png');
+    await expect(modal.getByText('420', { exact: true })).toBeVisible();
+    await expect(modal.getByText('80', { exact: true })).toBeVisible();
+    await expect(modal.getByText('24', { exact: true })).toBeVisible();
+    await expect(modal.getByText('53', { exact: true })).toBeVisible();
 
-    await page.getByRole('button', { name: 'Закрыть' }).click();
+    await modal.getByRole('button', { name: 'Закрыть' }).click();
 
-    await expect(page.getByRole('heading', { name: 'Детали ингредиента' })).toHaveCount(
-      0
-    );
+    await expect(modal).toHaveCount(0);
     await expect(page).toHaveURL('/');
   });
 
   test('closes ingredient details by clicking the overlay', async ({ page }) => {
     await page.getByRole('link', { name: new RegExp(bunName) }).click();
-    await expect(
-      page.getByRole('heading', { name: 'Детали ингредиента' })
-    ).toBeVisible();
+    const modal = page.locator('#modals > div').filter({
+      has: page.getByRole('heading', { name: 'Детали ингредиента' }),
+    });
+    await expect(modal).toBeVisible();
 
     await page.locator('div[class*="overlay"]').click({
       position: { x: 10, y: 10 },
     });
 
-    await expect(page.getByRole('heading', { name: 'Детали ингредиента' })).toHaveCount(
-      0
-    );
+    await expect(modal).toHaveCount(0);
     await expect(page).toHaveURL('/');
   });
 
@@ -105,14 +102,22 @@ test.describe('Burger constructor', () => {
     expect(JSON.parse(orderRequest.postData() ?? '{}')).toEqual({
       ingredients: ['bun-id', 'filling-id', 'bun-id'],
     });
-    await expect(page.getByText(String(orderNumber))).toBeVisible();
-    await expect(page.getByText('Ваш заказ начали готовить')).toBeVisible();
+    const orderModal = page
+      .locator('#modals > div')
+      .filter({ has: page.getByRole('heading', { name: String(orderNumber) }) });
+    await expect(orderModal).toBeVisible();
+    await expect(
+      orderModal.getByRole('heading', { name: String(orderNumber) })
+    ).toBeVisible();
+    await expect(
+      orderModal.getByText('Ваш заказ начали готовить', { exact: true })
+    ).toBeVisible();
 
     const burgerConstructor = page.locator('section[class*="burger_constructor"]');
     await expect(burgerConstructor.getByText('Выберите булки')).toHaveCount(2);
     await expect(burgerConstructor.getByText('Выберите начинку')).toBeVisible();
 
-    await page.getByRole('button', { name: 'Закрыть' }).click();
-    await expect(page.getByText('Ваш заказ начали готовить')).toHaveCount(0);
+    await orderModal.getByRole('button', { name: 'Закрыть' }).click();
+    await expect(orderModal).toHaveCount(0);
   });
 });
