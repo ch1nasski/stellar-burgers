@@ -1,16 +1,19 @@
 .burger_constructor {
   display: flex;
+  flex: 1;
   flex-direction: column;
   width: 600px;
+  min-height: 0;
   padding-bottom: 20px;
   color: #f2f2f3;
 }
 
 .elements {
+  flex: 0 1 auto;
   min-height: 100px;
   margin: 0;
   padding: 0;
-  overflow-y: scroll;
+  overflow-y: auto;
   list-style-type: none;
 }
 
